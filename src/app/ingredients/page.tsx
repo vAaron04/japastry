@@ -54,7 +54,9 @@ export default async function IngredientsPage() {
 
       <section className="flex flex-col gap-3">
         <h2 className="text-lg font-medium">Record a purchase</h2>
-        <RecordPurchaseForm ingredients={ingredients} />
+        <RecordPurchaseForm
+          ingredients={ingredients.map((i) => ({ id: i.id, name: i.name, unit: i.unit }))}
+        />
       </section>
     </div>
   );

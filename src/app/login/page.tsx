@@ -1,12 +1,16 @@
 import { LoginForm } from "@/components/login-form";
 
+function isSafeRelativePath(url: string | undefined): url is string {
+  return !!url && url.startsWith("/") && !url.startsWith("//");
+}
+
 export default async function LoginPage({
   searchParams,
 }: {
   searchParams: Promise<{ callbackUrl?: string }>;
 }) {
   const params = await searchParams;
-  const callbackUrl = params.callbackUrl || "/dashboard";
+  const callbackUrl = isSafeRelativePath(params.callbackUrl) ? params.callbackUrl : "/dashboard";
 
   return (
     <div className="mx-auto flex max-w-sm flex-col gap-6 pt-16">

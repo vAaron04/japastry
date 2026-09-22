@@ -3,19 +3,21 @@ import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/require-role";
 
 export default async function RecipesPage() {
-  await requireUser();
+  const user = await requireUser();
   const recipes = await prisma.recipe.findMany({ orderBy: { name: "asc" } });
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Recipes</h1>
-        <Link
-          href="/recipes/new"
-          className="rounded-md bg-black px-4 py-2 text-sm text-white dark:bg-white dark:text-black"
-        >
-          + New recipe
-        </Link>
+        {user.role === "OWNER" && (
+          <Link
+            href="/recipes/new"
+            className="rounded-md bg-black px-4 py-2 text-sm text-white dark:bg-white dark:text-black"
+          >
+            + New recipe
+          </Link>
+        )}
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">

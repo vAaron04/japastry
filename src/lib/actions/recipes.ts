@@ -4,7 +4,7 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { requireUser } from "@/lib/require-role";
+import { requireOwner } from "@/lib/require-role";
 
 const createRecipeSchema = z.object({
   name: z.string().trim().min(1, "Name is required"),
@@ -15,7 +15,7 @@ const createRecipeSchema = z.object({
 });
 
 export async function createRecipe(formData: FormData) {
-  await requireUser();
+  await requireOwner();
 
   const parsed = createRecipeSchema.safeParse({
     name: formData.get("name"),

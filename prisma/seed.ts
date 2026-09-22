@@ -1,11 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 const prisma = new PrismaClient();
 
+function generateRandomPassword(): string {
+  return crypto.randomBytes(12).toString("base64url");
+}
+
 async function main() {
   const email = process.env.OWNER_EMAIL || "owner@japastry.local";
-  const password = process.env.OWNER_PASSWORD || "changeme123";
+  const password = process.env.OWNER_PASSWORD || generateRandomPassword();
   const name = process.env.OWNER_NAME || "Owner";
 
   const existing = await prisma.user.findUnique({ where: { email } });
