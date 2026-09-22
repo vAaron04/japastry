@@ -13,6 +13,14 @@ enum Role {
   STAFF
 }
 
+model LoginAttempt {
+  id        String   @id @default(cuid())
+  email     String
+  createdAt DateTime @default(now())
+
+  @@index([email, createdAt])
+}
+
 model User {
   id           String   @id @default(cuid())
   name         String
