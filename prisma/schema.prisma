@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  OWNER
+  STAFF
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(STAFF)
+  createdAt    DateTime @default(now())
+
+  productionBatches ProductionBatch[]
+  sales             Sale[]
+}
+
+model Ingredient {
+  id                String   @id @default(cuid())
+  name              String   @unique
+  unit              String // e.g. "g", "kg", "pcs"
+  quantityOnHand    Float    @default(0)
+  avgCostPerUnit    Float    @default(0)
+  lowStockThreshold Float?
+  createdAt         DateTime @default(now())
+
+  purchases         IngredientPurchase[]
+  recipeIngredients RecipeIngredient[]
+}
+
+model IngredientPurchase {
+  id            String    @id @default(cuid())
+  ingredientId  String
+  ingredient    Ingredient @relation(fields: [ingredientId], references: [id])
+  quantity      Float
+  totalCost     Float
+  purchaseDate  DateTime  @default(now())
+  expiryDate    DateTime?
+  createdAt     DateTime  @default(now())
+}
+
+model Recipe {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  yieldQuantity Float // how many units one production run produces
+  yieldUnit   String // e.g. "pieces"
+  shelfLifeDays Int? // used to auto-set finished batch expiry
+  createdAt   DateTime @default(now())
+
+  ingredients RecipeIngredient[]
+  batches     ProductionBatch[]
+  sales       Sale[]
+}
+
+model RecipeIngredient {
+  id           String     @id @default(cuid())
+  recipeId     String
+  recipe       Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  ingredientId String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  quantity     Float // amount of ingredient needed per one batch (yieldQuantity units)
+
+  @@unique([recipeId, ingredientId])
+}
+
+model ProductionBatch {
+  id                String   @id @default(cuid())
+  recipeId          String
+  recipe            Recipe   @relation(fields: [recipeId], references: [id])
+  quantityProduced  Float
+  remainingQuantity Float
+  totalCost         Float // ingredient cost snapshot at time of production
+  producedAt        DateTime @default(now())
+  expiryDate        DateTime?
+  staffId           String
+  staff             User     @relation(fields: [staffId], references: [id])
+
+  sales Sale[]
+}
+
+model Sale {
+  id                String          @id @default(cuid())
+  recipeId          String
+  recipe            Recipe          @relation(fields: [recipeId], references: [id])
+  productionBatchId String
+  productionBatch   ProductionBatch @relation(fields: [productionBatchId], references: [id])
+  quantity          Float
+  revenue           Float
+  soldAt            DateTime        @default(now())
+  staffId           String
+  staff             User            @relation(fields: [staffId], references: [id])
+}
