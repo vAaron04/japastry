@@ -30,7 +30,7 @@ export async function Nav() {
             <Link
               key={link.href}
               href={link.href}
-              className="rounded-md px-3 py-1.5 text-sm hover:bg-black/5 dark:hover:bg-white/10"
+              className="rounded-md px-3 py-2 text-sm hover:bg-black/5 dark:hover:bg-white/10"
             >
               {link.label}
             </Link>
@@ -43,7 +43,7 @@ export async function Nav() {
           <form action={logoutAction}>
             <button
               type="submit"
-              className="rounded-md border border-black/10 px-3 py-1.5 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/10"
+              className="rounded-md border border-black/10 px-3 py-2 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/10"
             >
               Sign out
             </button>

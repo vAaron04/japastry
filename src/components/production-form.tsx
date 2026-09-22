@@ -62,11 +62,11 @@ export function ProductionForm({
       <button
         type="submit"
         disabled={pending}
-        className="rounded-md bg-black px-4 py-2 text-white disabled:opacity-50 dark:bg-white dark:text-black"
+        className="rounded-md bg-black px-4 py-2.5 text-white disabled:opacity-50 dark:bg-white dark:text-black"
       >
         {pending ? "Logging..." : "Log batch"}
       </button>
-      {state?.error && <p className="w-full text-sm text-red-600 dark:text-red-400">{state.error}</p>}
+      {state?.error && <p role="alert" className="w-full text-sm text-red-600 dark:text-red-400">{state.error}</p>}
     </form>
   );
 }

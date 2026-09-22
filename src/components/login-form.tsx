@@ -40,11 +40,11 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
           className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20 dark:bg-white/5"
         />
       </div>
-      {state?.error && <p className="text-sm text-red-600 dark:text-red-400">{state.error}</p>}
+      {state?.error && <p role="alert" className="text-sm text-red-600 dark:text-red-400">{state.error}</p>}
       <button
         type="submit"
         disabled={pending}
-        className="rounded-md bg-black px-4 py-2 text-white disabled:opacity-50 dark:bg-white dark:text-black"
+        className="rounded-md bg-black px-4 py-2.5 text-white disabled:opacity-50 dark:bg-white dark:text-black"
       >
         {pending ? "Signing in..." : "Sign in"}
       </button>

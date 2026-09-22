@@ -43,7 +43,7 @@ export function RecipeForm({
         <textarea id="recipe-description" name="description" className={inputClass} rows={2} />
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         <div className="flex flex-1 flex-col gap-1">
           <label className="text-sm font-medium" htmlFor="recipe-yield">
             Yield per batch
@@ -89,7 +89,7 @@ export function RecipeForm({
       <div className="flex flex-col gap-2">
         <p className="text-sm font-medium">Ingredients needed per batch</p>
         {Array.from({ length: lineCount }).map((_, i) => (
-          <div key={i} className="flex gap-3">
+          <div key={i} className="flex flex-wrap gap-3">
             <select name="ingredientId" required className={`${inputClass} flex-1`}>
               {ingredients.map((ing) => (
                 <option key={ing.id} value={ing.id}>
@@ -117,12 +117,12 @@ export function RecipeForm({
         </button>
       </div>
 
-      {state?.error && <p className="text-sm text-red-600 dark:text-red-400">{state.error}</p>}
+      {state?.error && <p role="alert" className="text-sm text-red-600 dark:text-red-400">{state.error}</p>}
 
       <button
         type="submit"
         disabled={pending}
-        className="w-fit rounded-md bg-black px-4 py-2 text-white disabled:opacity-50 dark:bg-white dark:text-black"
+        className="w-fit rounded-md bg-black px-4 py-2.5 text-white disabled:opacity-50 dark:bg-white dark:text-black"
       >
         {pending ? "Creating..." : "Create recipe"}
       </button>
